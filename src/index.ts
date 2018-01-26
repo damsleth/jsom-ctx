@@ -43,11 +43,7 @@ export class JsomContext implements IJsomContext {
     }
 }
 
-export const CreateJsomContext = async (url: string): Promise<JsomContext> => {
-    let _ = new JsomContext(url);
-    let jsomCtx = await _.load();
-    return jsomCtx;
-}
+export const CreateJsomContext = async (url: string): Promise<JsomContext> => await new JsomContext(url).load()
 
 export const ExecuteJsomQuery = async (ctx: JsomContext, clientObjectsToLoad: SP.ClientObject[] = []) => {
     return new Promise<{ sender, args }>((resolve, reject) => {
