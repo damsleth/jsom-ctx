@@ -24,8 +24,8 @@ export class JsomContext implements IJsomContext {
     public lists: SP.ListCollection;
     public propBag: SP.FieldStringValues;
 
-    constructor(url: string) {
-        this.url = url;
+    constructor(url?: string) {
+        this.url = url || _spPageContextInfo.webAbsoluteUrl;
     }
 
     public async load(): Promise<JsomContext> {
