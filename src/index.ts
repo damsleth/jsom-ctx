@@ -6,13 +6,13 @@ export interface IJsomContext {
     propBag: SP.FieldStringValues;
 }
 
-function __getClientContext(url: string) {
+const __getClientContext = (url: string) => {
     return new Promise<SP.ClientContext>((resolve, reject) => {
         SP.SOD.executeFunc("sp.js", "SP.ClientContext", () => {
             const clientContext = new SP.ClientContext(url);
             resolve(clientContext);
-        });
-    });
+        }), reject(`Unable to resolve clientContext`);
+    })
 }
 
 export class JsomContext implements IJsomContext {
@@ -43,13 +43,13 @@ export class JsomContext implements IJsomContext {
     }
 }
 
-export async function CreateJsomContext(url: string): Promise<JsomContext> {
+export const CreateJsomContext = async (url: string): Promise<JsomContext> => {
     let _ = new JsomContext(url);
     let jsomCtx = await _.load();
     return jsomCtx;
 }
 
-export function ExecuteJsomQuery(ctx: JsomContext, clientObjectsToLoad: SP.ClientObject[] = []) {
+export const ExecuteJsomQuery = async (ctx: JsomContext, clientObjectsToLoad: SP.ClientObject[] = []) => {
     return new Promise<{ sender, args }>((resolve, reject) => {
         clientObjectsToLoad.forEach(clientObj => ctx.clientContext.load(clientObj));
         ctx.clientContext.executeQueryAsync((sender, args) => {
@@ -59,4 +59,3 @@ export function ExecuteJsomQuery(ctx: JsomContext, clientObjectsToLoad: SP.Clien
         })
     });
 }
-
